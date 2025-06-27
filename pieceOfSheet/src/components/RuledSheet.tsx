@@ -14,7 +14,7 @@ function RuledSheet() {
 
       // Create a single row template
       const row = document.createElement('div');
-      row.className = 'border-t border-gray-200';
+      row.className = 'border-t border-gray-200 border-dashed';
       row.style.height = '24px';
       row.contentEditable = 'true';
       row.style.padding = '0 10px';

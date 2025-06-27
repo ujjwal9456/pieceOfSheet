@@ -4,19 +4,34 @@ function Toolbar() {
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+
+  // Helper method to get relative position
+  const getRelativePosition = (x: number, y: number): { startX: number; startY: number } => {
+    const rect = toolbarRef.current?.getBoundingClientRect() || { x: 0, y: 0 };
+    return {
+      startX: x - rect.x,
+      startY: y - rect.y
+    };
+  };
+
+
+  // Helper method to update position
+  const updatePosition = (x: number, y: number, startX: number, startY: number) => {
+    setPosition({
+      x: x - startX,
+      y: y - startY
+    });
+  };
+
+
+  // Mouse event handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     const { clientX, clientY } = e;
-    const rect = toolbarRef.current?.getBoundingClientRect() || { x: 0, y: 0 };
-    
-    const startX = clientX - rect.x;
-    const startY = clientY - rect.y;
+    const { startX, startY } = getRelativePosition(clientX, clientY);
 
     const moveHandler = (e: MouseEvent) => {
-      setPosition({
-        x: e.clientX - startX,
-        y: e.clientY - startY
-      });
+      updatePosition(e.clientX, e.clientY, startX, startY);
     };
 
     const upHandler = () => {
@@ -31,36 +46,25 @@ function Toolbar() {
   const handleMouseMove = (e: MouseEvent) => {
     if (toolbarRef.current) {
       const { clientX, clientY } = e;
-      const rect = toolbarRef.current.getBoundingClientRect();
-      const startX = clientX - rect.x;
-      const startY = clientY - rect.y;
-      
-      setPosition({
-        x: clientX - startX,
-        y: clientY - startY
-      });
+      const { startX, startY } = getRelativePosition(clientX, clientY);
+      updatePosition(clientX, clientY, startX, startY);
     }
   };
+
 
   const handleMouseUp = () => {
     document.removeEventListener('mousemove', handleMouseMove);
   };
 
-  // Add touch event handlers
+  // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault();
     const touch = e.touches[0];
-    const rect = toolbarRef.current?.getBoundingClientRect() || { x: 0, y: 0 };
-    
-    const startX = touch.clientX - rect.x;
-    const startY = touch.clientY - rect.y;
+    const { startX, startY } = getRelativePosition(touch.clientX, touch.clientY);
 
     const moveHandler = (e: TouchEvent) => {
       const touch = e.touches[0];
-      setPosition({
-        x: touch.clientX - startX,
-        y: touch.clientY - startY
-      });
+      updatePosition(touch.clientX, touch.clientY, startX, startY);
     };
 
     const endHandler = () => {
@@ -75,14 +79,8 @@ function Toolbar() {
   const handleTouchMove = (e: TouchEvent) => {
     if (toolbarRef.current) {
       const touch = e.touches[0];
-      const rect = toolbarRef.current.getBoundingClientRect();
-      const startX = touch.clientX - rect.x;
-      const startY = touch.clientY - rect.y;
-      
-      setPosition({
-        x: touch.clientX - startX,
-        y: touch.clientY - startY
-      });
+      const { startX, startY } = getRelativePosition(touch.clientX, touch.clientY);
+      updatePosition(touch.clientX, touch.clientY, startX, startY);
     }
   };
 
@@ -111,7 +109,7 @@ function Toolbar() {
       onTouchMove={(e) => handleTouchMove(e as unknown as TouchEvent)}
       onTouchEnd={handleTouchEnd}
     >
-      Ujjwal Shekhar
+        Drag me
     </div>
   );
 }

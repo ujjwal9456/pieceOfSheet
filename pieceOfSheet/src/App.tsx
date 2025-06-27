@@ -8,7 +8,7 @@ function App() {
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto p-4">
         <Toolbar />
-        <RuledSheet />
+        <RuledSheet pattern='________'/>
       </div>
     </div>
   );

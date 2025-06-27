@@ -40,7 +40,7 @@ function Toolbar() {
       onMouseMove={(e) => handleMouseMove(e as unknown as MouseEvent)}
       onMouseUp={handleMouseUp}
     >
-        Ujjwal
+        Ujjwal Shekhar
     </div>
   );
 }
